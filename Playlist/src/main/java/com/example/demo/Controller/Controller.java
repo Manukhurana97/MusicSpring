@@ -1,8 +1,11 @@
 package com.example.demo.Controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 
 import com.example.demo.Dao.FollowPlaylistdao;
@@ -19,6 +22,7 @@ import com.example.demo.Dao.Playlistdao;
 import com.example.demo.Model.Playlist;
 
 import com.example.demo.Response.PlaylistResponse;
+import com.example.demo.Service.Playlistservice;
 
 @RestController
 @RequestMapping("/Playlist")
@@ -36,18 +40,22 @@ public class Controller {
 
 	@Autowired
 	public usercalldata usercalldata;
+	
+	@Autowired
+	public Playlistservice playlistservice;
 
 	@PostMapping("/CreatePlaylist")
-	public ResponseEntity<PlaylistResponse> createPlaylist(@RequestHeader(name="Authorization") String token, @RequestBody PlaylistIncommingdata data){
+	public ResponseEntity<PlaylistResponse> createPlaylist(@RequestHeader(name="Authentication") String token, @RequestBody PlaylistIncommingdata data){
 		PlaylistResponse response = new PlaylistResponse();
 		HttpStatus status = HttpStatus.CREATED;
 		try
 		{
-//			api calling
-			Map.Entry<String, String> userinfo = usercalldata.usercall(token);
 
+			Map.Entry<String, String> user_authority = playlistservice.usercall(token);
+
+			System.out.println(user_authority.getKey());
 			Playlist plst = new Playlist();
-			plst.setPlaylistcreater(userinfo.getKey());
+			plst.setPlaylistcreater(user_authority.getKey());
 
 //			playlist name
 			plst.setPlaylistname(data.getPlaylistname());
@@ -76,23 +84,53 @@ public class Controller {
 		}
 		catch(Exception e)
 		{
-			response.setMgs(e.toString());
+			response.setMgs(e.getMessage().toString());
+			status = HttpStatus.NOT_FOUND;
 		}
 
+		return new ResponseEntity<>(response, status);
+	}
+	
+	@PostMapping("/usersPlaylist")
+	public ResponseEntity<PlaylistResponse> usersPlaylist(@RequestHeader(name="Authentication") String token) {
+		PlaylistResponse response = new PlaylistResponse();
+		HttpStatus status = HttpStatus.CREATED;
+		try {
+			//		api calling
+			Map.Entry<String, String> user_authority = playlistservice.usercall(token);
+			System.out.println(user_authority);
+			try {
+
+				List<Playlist> plst = PLdao.findAllByPlaylistcreater( user_authority.getKey());
+				System.out.println(plst);
+				response.setLstplst(plst);
+
+			} catch (Exception e) {
+				response.setMgs(e.getMessage().toString());
+				status = HttpStatus.NOT_FOUND;
+			}
+		}
+		catch (Exception e) {
+			response.setMgs(e.toString());
+			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			status = HttpStatus.UNAUTHORIZED;
+		}
 		return new ResponseEntity<>(response, status);
 	}
 
 
 	@PostMapping("/PublicprivatePlaylist")
-	public ResponseEntity<PlaylistResponse> publicPlaylist(@RequestHeader(name="Authorization") String token, @RequestBody PlaylistIncommingdata data) {
+	public ResponseEntity<PlaylistResponse> publicPlaylist(@RequestHeader(name="Authentication") String token, @RequestBody PlaylistIncommingdata data) {
 		PlaylistResponse response = new PlaylistResponse();
 		HttpStatus status = HttpStatus.CREATED;
 		try {
 			//		api calling
-			Map.Entry<String, String> userinfo = usercalldata.usercall(token);
+
+			Map.Entry<String, String> user_authority = playlistservice.usercall(token);
+			System.out.println(user_authority);
 			try {
 
-				Playlist plst = PLdao.findByPlaylistidAndPlaylistcreater(data.playlistid, userinfo.getKey());
+				Playlist plst = PLdao.findByPlaylistidAndPlaylistcreater(data.playlistid, user_authority.getKey());
 //			updating to public
 				if (!plst.getPublicprivate()) {
 					plst.setPublicprivate(true);
@@ -118,18 +156,17 @@ public class Controller {
 
 
 	@DeleteMapping("/DeletePlaylist")
-	public ResponseEntity<PlaylistResponse> DeletePlaylist(@RequestHeader(name="Authorization") String token, @RequestBody PlaylistIncommingdata data) {
+	public ResponseEntity<PlaylistResponse> DeletePlaylist(@RequestHeader(name="Authentication") String token, @RequestBody PlaylistIncommingdata data) {
 		PlaylistResponse response = new PlaylistResponse();
 		HttpStatus status = HttpStatus.CREATED;
 
 		try {
 			//	api calling
-			Map.Entry<String, String> userinfo = usercalldata.usercall(token);
-
+			Map.Entry<String, String> user_authority = playlistservice.usercall(token);
 
 			try {
-				Playlist plst = PLdao.findByPlaylistidAndPlaylistcreater(data.getPlaylistid(), userinfo.getKey());
-				if(!plst.getPlaylistcreater().equals(userinfo.getKey()))
+				Playlist plst = PLdao.findByPlaylistidAndPlaylistcreater(data.getPlaylistid(), user_authority.getKey());
+				if(!plst.getPlaylistcreater().equals(user_authority.getKey()))
 				{
 					throw new SecurityException("You can't perform this operations");
 				}

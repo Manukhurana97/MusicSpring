@@ -1,0 +1,111 @@
+package com.example.demo.Model;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+public class Playlist {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public int playlistid;
+	public String playlistname;
+	public String playlistdescription;
+	public String playlistCoverUrl;
+	public LocalDate Createon;
+	public String playlistcreater;
+
+	@Column(columnDefinition = "boolean default false")
+	public Boolean publicprivate;
+
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "playlist")
+    public List<PlaylistFollowers> followers;
+
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "playlist")
+	public List<PlaylistSongs> playlistSongs;
+
+
+	public int getPlaylistid() {
+		return playlistid;
+	}
+
+
+	public String getPlaylistname() {
+		return playlistname;
+	}
+
+	public void setPlaylistname(String playlistname) {
+		this.playlistname = playlistname;
+	}
+
+	public String getPlaylistdescription() {
+		return playlistdescription;
+	}
+
+	public void setPlaylistdescription(String playlistdescription) {
+		this.playlistdescription = playlistdescription;
+	}
+
+	public String getPlaylistCoverUrl() {
+		return playlistCoverUrl;
+	}
+
+	public void setPlaylistCoverUrl(String playlistCoverUrl) {
+		this.playlistCoverUrl = playlistCoverUrl;
+	}
+
+	public LocalDate getCreateon() {
+		return Createon;
+	}
+
+	public void setCreateon(LocalDate createon) {
+		Createon = createon;
+	}
+
+	public String getPlaylistcreater() {
+		return playlistcreater;
+	}
+
+	public void setPlaylistcreater(String playlistcreater) {
+		this.playlistcreater = playlistcreater;
+	}
+
+	public Boolean getPublicprivate() {
+		return publicprivate;
+	}
+
+	public void setPublicprivate(Boolean publicprivate) {
+		this.publicprivate = publicprivate;
+	}
+
+	public List<PlaylistFollowers> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(List<PlaylistFollowers> followers) {
+		this.followers = followers;
+	}
+
+
+	public List<PlaylistSongs> getPlaylistSongs() {
+		return playlistSongs;
+	}
+
+	public void setPlaylistSongs(List<PlaylistSongs> playlistSongs) {
+		this.playlistSongs = playlistSongs;
+	}
+}

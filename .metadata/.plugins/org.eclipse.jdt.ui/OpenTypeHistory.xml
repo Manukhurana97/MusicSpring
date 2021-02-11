@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=Ride/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.demo.model{ThemeparkRide.java[ThemeparkRide" modifiers="1" timestamp="1607586995768"/>
+<typeInfo handle="=Ride/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.demo.Controller{controller.java[controller" modifiers="1" timestamp="1607589077275"/>
+<typeInfo handle="=Ride/C:\/Users\/844191\/.m2\/repository\/org\/apache\/tomcat\/embed\/tomcat-embed-core\/9.0.39\/tomcat-embed-core-9.0.39.jar=/maven.pomderived=/true=/=/maven.pomderived=/true=/=/maven.groupId=/org.apache.tomcat.embed=/=/maven.artifactId=/tomcat-embed-core=/=/maven.version=/9.0.39=/=/maven.scope=/compile=/&lt;org.apache.catalina(User.class[User" modifiers="1537" timestamp="1607575885281"/>
+<typeInfo handle="=Zuul-Gateway/C:\/Users\/844191\/.m2\/repository\/org\/springframework\/security\/spring-security-core\/5.3.6.RELEASE\/spring-security-core-5.3.6.RELEASE.jar=/maven.pomderived=/true=/=/maven.pomderived=/true=/=/maven.groupId=/org.springframework.security=/=/maven.artifactId=/spring-security-core=/=/maven.version=/5.3.6.RELEASE=/=/maven.scope=/compile=/&lt;org.springframework.security.core.userdetails(User.class[User" modifiers="33" timestamp="1607944034045"/>
+</typeInfoHistroy>

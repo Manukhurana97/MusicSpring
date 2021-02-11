@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Playlist {
 
@@ -28,9 +31,12 @@ public class Playlist {
 	@Column(columnDefinition = "boolean default false")
 	public Boolean publicprivate;
 
+	@JsonBackReference
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "playlist")
     public List<PlaylistFollowers> followers;
 
+	
+	@JsonBackReference
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "playlist")
 	public List<PlaylistSongs> playlistSongs;
 

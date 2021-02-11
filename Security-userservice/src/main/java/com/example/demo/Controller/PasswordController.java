@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +27,7 @@ import com.example.demo.Response.RegisterResponse;
 import com.example.demo.Validator.PasswordValidator;
 import com.example.demo.model.PasswordResetToken;
 import com.example.demo.model.RegisterForm;
+import com.example.demo.model.UserDetails;
 import com.example.demo.model.Users;
 
 import io.jsonwebtoken.Claims;
@@ -53,6 +54,9 @@ public class PasswordController {
     
     @Autowired
     public EmailServiceImpl emailServiceImpl;
+    
+    @Autowired
+    public com.example.demo.Service.UserService UserService;
 	
     
     @PostMapping("/change-password")
@@ -100,8 +104,9 @@ public class PasswordController {
 	     else 
 	     {
 	    	 try {
-	    		 Users user = dao.findByUsername(form.getUsername());
-	    		 System.out.println(user);
+//	    		 Users user = dao.findByUsername(form.getUsername());
+	    		 CompletableFuture<Users> CF_userDetails = UserService.findUserbyusername(form.getUsername());
+	    		 Users user = CF_userDetails.get();
 	    		 if (user.getUsername()==null) 
 	    		 {
 	    			 throw new UsernameNotFoundException("invalid Email");

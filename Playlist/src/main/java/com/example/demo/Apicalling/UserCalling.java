@@ -10,7 +10,7 @@ import java.util.Map;
 @FeignClient("UserService")
 public interface UserCalling {
 
-	@PostMapping("/Account/CheckToken")
-	@LoadBalanced
-	Map<String, String> checktokenzuul(@RequestHeader(name = "Authentication") String token);
+    @PostMapping("/Account/CheckToken")
+
+    Map<String, String> checktokenzuul(@RequestHeader(name = "Authentication") String token);
 }

@@ -1,0 +1,23 @@
+package com.example.demo.Service;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.Controller.usercalldata;
+
+@Service
+public class Playlistservice {
+	
+	@Autowired
+    public usercalldata usercalldata;
+	
+	@Async
+	public Map.Entry<String, String> usercall(String token)
+	{
+		
+		return usercalldata.usercall(token);
+	}
+}

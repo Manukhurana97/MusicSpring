@@ -36,31 +36,27 @@ public class SecurityJwtFilters extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String jwttoken = request.getHeader("Authentication");
-        try{
+        try {
 
-            if(util.checkToken(jwttoken)!=null && SecurityContextHolder.getContext().getAuthentication()==null)
-            {
+            if (util.checkToken(jwttoken) != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 Claims claims = util.checkToken(jwttoken);
 
                 Users users = dao.findByUsername(claims.get("SESS_USERNAME").toString());
 
-                if(!util.isTokenExpired(jwttoken))
-                {
+                if (!util.isTokenExpired(jwttoken)) {
                     List<GrantedAuthority> authorities = new ArrayList<>();
-                   
+
                     authorities.add(new SimpleGrantedAuthority(users.getAuthorities().getAuthority()));
-                    
+
                     UserDetails userDetails = new User(users.getUsername(), users.getPassword(), authorities);
-                    
+
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    
+
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.toString());
             SecurityContextHolder.clearContext();
         }

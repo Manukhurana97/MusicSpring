@@ -2,6 +2,8 @@
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class PlaylistSongs {
 
@@ -10,6 +12,7 @@ public class PlaylistSongs {
     public int id;
     public int songid;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "playlistid", nullable = false)
     public Playlist playlist;

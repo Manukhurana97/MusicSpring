@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.ApiCall.UserArtistenablecalling;
+import com.example.demo.Service.Artistservice;
 import com.example.demo.dao.ArtistRequestDao;
 import com.example.demo.model.Artist_Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.ApiCall.Calling;
 import com.example.demo.Response.ArtistApiCallResponse;
 import com.example.demo.Response.ArtistResponse;
+import com.example.demo.Response.ArtistResponseRequest;
 import com.example.demo.dao.ArtistDao;
 import com.example.demo.dao.hibernate.ArtistQueryImpl;
 import com.example.demo.model.Artist;
@@ -21,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import javax.naming.AuthenticationException;
 
@@ -43,9 +46,12 @@ public class Controller {
 	@Autowired
 	ArtistRequestDao artistRequestDao;
 
+	@Autowired
+	Artistservice artistservice;
+
 	
 	@PostMapping("/AddArtist/{Requestid}")
-	 public ResponseEntity<ArtistResponse> AddArtist(@RequestHeader (name="Authorization") String token, @PathVariable int Requestid)
+	 public ResponseEntity<ArtistResponse> AddArtist(@RequestHeader (name="Authentication") String token, @PathVariable int Requestid)
 	 {
 		 ArtistResponse response = new ArtistResponse();
 		 HttpStatus status=HttpStatus.CREATED;
@@ -55,39 +61,50 @@ public class Controller {
 
 //			 request data
 			 Artist_Request data = artistRequestDao.findByArtistrequestid(Requestid);
-			 System.out.println(data.getUserid());
-			 if(data.getArtistname() != null)
+			 
+			 System.out.println(dao.existsDistinctByArtistemail(data.getUserid()));
+			 if(!dao.existsDistinctByArtistemail(data.getUserid()))
 			 {
-				 Artist artist = new Artist();
-				 artist.setArtistname(data.getArtistname());  // username
-				 
-				 if(data.getImage() != null) 
+			 
+				 if(data.getArtistname() != null)
 				 {
-					 artist.setImage(data.getImage()); // image
-				 } 
-				 if(data.getDescription() != null) 
-				 {
-					 artist.setDescription(data.getDescription()); // description
+					 Artist artist = new Artist();
+					 artist.setArtistname(data.getArtistname());  // username
+					 artist.setArtistemail(data.getUserid());
+					 
+					 if(data.getImage() != null) 
+					 {
+						 artist.setImage(data.getImage()); // image
+					 } 
+					 if(data.getDescription() != null) 
+					 {
+						 artist.setDescription(data.getDescription()); // description
+					 }
+					 
+					 artist = dao.saveAndFlush(artist);
+	
+	//				 user call set artist = true
+					 artistservice.callingUserArtistenable(token, artist.getArtistid(), data.getUserId());
+	
+	//				 delete from request
+					 artistservice.deleterequest(data.getArtistrequestid());
+	
+					 response.setMessage("Saved Successfully");
 				 }
-				 
-				 artist = dao.saveAndFlush(artist);
-
-//				 user call set artist = true
-				 Map<Integer, String> map = new HashMap<>();
-				 map.put(artist.getArtistid(), data.getUserId());
-				 System.out.println(map);
-				 callingUserArtistenable.CreateArtist(token, map);
-
-//				 delete from request
-				 artistRequestDao.deleteById(data.getArtistrequestid());
-
-				 response.setMessage("Saved Successfully");
+				 else 
+				 {
+					 response.setMessage("Name can't be null");
+					 status = HttpStatus.BAD_REQUEST;
+				 }
 			 }
 			 else 
 			 {
-				 response.setMessage("Name can't be null");
+//				 delete from request
+				 artistRequestDao.deleteById(data.getArtistrequestid());
+				 response.setMessage("Your account is already an artist account");
 				 status = HttpStatus.BAD_REQUEST;
 			 }
+			 
 		 }
 		 catch(Exception e)
 		 {
@@ -98,7 +115,7 @@ public class Controller {
 		 return new ResponseEntity<>(response, status);
 	 }
 
-	private void UserCall(@RequestHeader(name = "Authorization") String token) throws AuthenticationException {
+	private void UserCall(@RequestHeader(name = "Authentication") String token) throws AuthenticationException {
 		Map<String, String> map = calling.checktokenzuul(token);
 		Map.Entry<String, String> user_authority = map.entrySet().iterator().next();
 		System.out.println(user_authority.getValue());
@@ -108,9 +125,30 @@ public class Controller {
 		}
 	}
 
+	
+	@GetMapping("/AllArtistRequest")
+	public ResponseEntity<ArtistResponseRequest> AllArtistRequest(@RequestHeader (name="Authentication") String token)
+	{
+		ArtistResponseRequest response = new ArtistResponseRequest();
+		HttpStatus status=HttpStatus.OK;
+		try{
+//			Api calling
+			UserCall(token);
+
+			 List<Artist_Request> lst = artistRequestDao.findAll();
+			response.setAllRequest(lst);
+		}
+		catch(Exception e)
+		{
+			status = HttpStatus.UNAUTHORIZED;
+			response.setMessage(e.toString());
+		}
+
+		return new ResponseEntity<>(response, status);
+	}
 
 	@GetMapping("/AllArtist")
-	public ResponseEntity<ArtistResponse> AllArtist(@RequestHeader (name="Authorization") String token)
+	public ResponseEntity<ArtistResponse> AllArtist(@RequestHeader (name="Authentication") String token)
 	{
 		ArtistResponse response = new ArtistResponse();
 		HttpStatus status=HttpStatus.OK;
@@ -134,7 +172,7 @@ public class Controller {
 	
 	@PostMapping("/checkArtistsApiCall")
 	@Cacheable(value="Artistlist")
-	public ResponseEntity<ArtistApiCallResponse> CheckArtistApiCall(@RequestHeader (name="Authorization") String token, @RequestBody List<Artist> artistList)
+	public ResponseEntity<ArtistApiCallResponse> CheckArtistApiCall(@RequestHeader (name="Authentication") String token, @RequestBody List<Artist> artistList)
 	{
 		ArtistApiCallResponse response = new ArtistApiCallResponse();
 		HttpStatus status=HttpStatus.OK;

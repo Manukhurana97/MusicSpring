@@ -25,7 +25,8 @@ public class Music implements Serializable {
     public String type;
     public String Language;
     public int Listencount;
-
+    public String requestor;
+    
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "music")
     public List<Artists> artists;
 
@@ -107,4 +108,13 @@ public class Music implements Serializable {
     public void setFollowers(List<SongFollowers> followers) {
         this.followers = followers;
     }
+
+	public String getRequestor() {
+		return requestor;
+	}
+
+	public void setRequestor(String requestor) {
+		this.requestor = requestor;
+	}
+    
 }

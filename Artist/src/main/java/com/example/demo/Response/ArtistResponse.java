@@ -1,9 +1,13 @@
 package com.example.demo.Response;
 
 import com.example.demo.model.Artist;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.util.List;
 
+
+@JsonInclude(value = Include.NON_NULL)
 public class ArtistResponse {
 	
 

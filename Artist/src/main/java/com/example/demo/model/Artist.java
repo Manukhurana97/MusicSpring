@@ -20,6 +20,8 @@ public class Artist implements Serializable {
 	private int artistid;
 	
 	public String artistname;
+	@Column(unique = true)
+	public String artistemail;
 	public String image;
 	
 	public String description;
@@ -40,6 +42,14 @@ public class Artist implements Serializable {
 
 	public void setArtistname(String artistname) {
 		this.artistname = artistname;
+	}
+
+	public String getArtistemail() {
+		return artistemail;
+	}
+
+	public void setArtistemail(String artistemail) {
+		this.artistemail = artistemail;
 	}
 
 	public String getImage() {

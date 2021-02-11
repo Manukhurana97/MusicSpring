@@ -1,0 +1,21 @@
+package com.example.demo.Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.Dao.userdetailsDao;
+import com.example.demo.model.UserDetails;
+
+@Service
+public class UserService {
+
+	 @Autowired
+	 public userdetailsDao userdetailsdao;
+	 
+	@Async
+	public UserDetails findbyusername(String username) 
+	{
+		return userdetailsdao.findByusers_Username(username);
+	}
+}

@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +43,12 @@ public class ArtistQueryImpl implements ArtistQuery {
 	}
 
 	@Override
-	public void deleteByFollower(int id) {
+	@Transactional
+	public void deleteByFollower(Followers follow) {
 		Session session = entityManager.unwrap(Session.class);
-		Followers follow = session.get(Followers.class, id);
-		System.out.println(follow.getUsername());
-		session.remove(follow.getId());
-		session.close();
+		String sql = "delete from followers where id="+follow.getId();
+		session.createSQLQuery(sql).executeUpdate();
+		session.flush();
 		entityManager.close();
 		
 	}

@@ -41,7 +41,7 @@ public class FollowController {
 
 
     @PostMapping("/FollowArtist/{artistid}")
-     public ResponseEntity<ArtistResponse> AddArtist(@RequestHeader(name="Authorization") String token, @PathVariable(value = "artistid") int artistid)
+     public ResponseEntity<ArtistResponse> AddArtist(@RequestHeader(name="Authentication") String token, @PathVariable(value = "artistid") int artistid)
     {
         ArtistResponse response = new ArtistResponse();
         HttpStatus status=HttpStatus.OK;
@@ -74,15 +74,13 @@ public class FollowController {
                 }
                 else {
 //                unfollow
-                    System.out.println(check_exists.getId());
-//                    followDao.deleteByArtist_ArtistidAndAndUsername(artistid, user.getKey());
-                    followDao.deleteById(check_exists.getId());
-                    artistqueryimpl.deleteByFollower(check_exists.getId());
+                    artistqueryimpl.deleteByFollower(check_exists);
+                    
                     response.setMessage("Unfollow successfully");
                 }
 
             } catch (Exception e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage().toString());
             }
         }
         catch (Exception e)

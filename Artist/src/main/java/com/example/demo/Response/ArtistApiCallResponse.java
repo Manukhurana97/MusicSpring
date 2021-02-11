@@ -3,7 +3,10 @@ package com.example.demo.Response;
 import java.util.List;
 
 import com.example.demo.model.Artist;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(value = Include.NON_NULL)
 public class ArtistApiCallResponse {
 	
 	public List<Artist> lst_of_artist;

@@ -21,43 +21,46 @@ public class ArtistRequest {
     ArtistRequestDao artistRequestDao;
 
     @Autowired
-    Calling calling;
+	 Calling calling;
 
 
-    private String UserCall(@RequestHeader(name = "Authorization") String token) throws AuthenticationException {
+    public String UserCall(@RequestHeader(name = "Authentication") String token) throws AuthenticationException {
+    	System.out.println(token);
         Map<String, String> map = calling.checktokenzuul(token);
         Map.Entry<String, String> user_authority = map.entrySet().iterator().next();
+        
         if(!user_authority.getValue().equals("ROLE_USER"))
         {
-            throw new AuthenticationException("Permission Denied");
+            throw new AuthenticationException("Permission Denied, The requester is not user");
         }
-
         return user_authority.getKey();
     }
 
     @PostMapping("/AddArtist")
-    public ResponseEntity<ArtistResponse> AddArtist(@RequestHeader(name="Authorization") String token, @RequestBody Incommingdata data) throws AuthenticationException {
+    public ResponseEntity<ArtistResponse> AddArtist(@RequestHeader(name="Authentication") String token, @RequestBody Incommingdata data) throws AuthenticationException {
         ArtistResponse response = new ArtistResponse();
         HttpStatus status=HttpStatus.CREATED;
-
+        try {
 //        user calling
-        String userid = UserCall(token);
+            String userid = UserCall(token);
 
-        Artist_Request request = new Artist_Request();
-        request.setArtistname(data.getArtistname());  // username
-        request.setUserid(userid);
+            Artist_Request request = new Artist_Request();
+            request.setArtistname(data.getArtistname());  // username
+            request.setUserid(userid);
 
-        if(data.getImage() != null)
-        {
-            request.setImage(data.getImage()); // image
+            if (data.getImage() != null) {
+                request.setImage(data.getImage()); // image
+            }
+            if (data.getDescription() != null) {
+                request.setDescription(data.getDescription()); // description
+            }
+            artistRequestDao.saveAndFlush(request);
+            response.setMessage("Request Raise successfully");
         }
-        if(data.getDescription() != null)
+        catch (Exception e)
         {
-            request.setDescription(data.getDescription()); // description
+            response.setMessage(e.getMessage().toString());
         }
-
-        artistRequestDao.saveAndFlush(request);
-        response.setMessage("Request Raise successfully");
 
         return new ResponseEntity<>(response, status);
     }

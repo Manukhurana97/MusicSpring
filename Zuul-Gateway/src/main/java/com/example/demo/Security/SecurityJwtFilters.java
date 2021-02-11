@@ -36,9 +36,10 @@ public class SecurityJwtFilters extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        final String jwttoken = request.getHeader("Authorization");
+        final String jwttoken = request.getHeader("Authentication");
         try{
         	System.out.println(jwttoken);
+        	
             if(util.checkToken(jwttoken)!=null && SecurityContextHolder.getContext().getAuthentication()==null)
             {
                 Claims claims = util.checkToken(jwttoken);
@@ -58,11 +59,13 @@ public class SecurityJwtFilters extends OncePerRequestFilter {
                     
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    System.out.println(usernamePasswordAuthenticationToken);
                 }
             }
         }
         catch(Exception e)
         {
+            System.out.println(e);
             SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(request, response);

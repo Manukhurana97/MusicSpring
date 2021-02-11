@@ -17,6 +17,6 @@ public interface ArtistCalling {
 
 	@PostMapping("/Artist/checkArtistsApiCall")
     @LoadBalanced
-	public ResponseEntity<com.example.music.ApiCall.incomming.ArtistApiCallResponse> CheckArtistApiCall(@RequestHeader (name="Authorization") String token, @RequestBody List<Artists> artistList);
+	public ResponseEntity<com.example.music.ApiCall.incomming.ArtistApiCallResponse> CheckArtistApiCall(@RequestHeader (name="Authentication") String token, @RequestBody List<Artists> artistList);
 
 }
