@@ -8,3 +8,4 @@ Circuit Breaker                     :  not started
 Central Configurations              :  not started
 Featues addition                    :  not started
 2 step verificaion                  :  not started
+Aws Hosting                         :  not started
