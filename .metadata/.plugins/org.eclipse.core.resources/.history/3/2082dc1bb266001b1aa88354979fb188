@@ -1,0 +1,22 @@
+package com.example.demo.Thread;
+
+import java.util.concurrent.Executor;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+@Configuration
+@EnableAsync
+public class SpringAsyncConfig implements AsyncConfigurer {
+	
+	
+	public Executor getAyscExecutor() 
+	{
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		System.out.println(executor.getCorePoolSize());
+		return executor;
+		
+	}
+}

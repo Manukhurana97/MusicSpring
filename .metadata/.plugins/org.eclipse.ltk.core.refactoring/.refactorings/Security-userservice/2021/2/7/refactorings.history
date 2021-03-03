@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 6 elements from project &apos;Security-userservice&apos;&#x0D;&#x0A;- Original project: &apos;Security-userservice&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     generated-sources&#x0D;&#x0A;     generated-test-sources&#x0D;&#x0A;     maven-archiver&#x0D;&#x0A;     maven-status&#x0D;&#x0A;     UserService.jar&#x0D;&#x0A;     UserService.jar.original" description="Delete elements" element1="target/generated-test-sources" element2="target/maven-archiver" element3="target/generated-sources" element4="target/maven-status" element5="target/UserService.jar" element6="target/UserService.jar.original" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="6" stamp="1612938482577" subPackages="false" version="1.0"/>
+</session>

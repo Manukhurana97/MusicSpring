@@ -1,0 +1,82 @@
+package com.example.demo.Controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.Dao.UserDao;
+import com.example.demo.Dao.userdetailsDao;
+import com.example.demo.Email.EmailServiceImpl;
+import com.example.demo.Extension.ExtendedUser;
+import com.example.demo.Response.Response;
+import com.example.demo.model.UserDetails;
+import com.example.demo.model.Users;
+
+@RestController
+@RequestMapping("/Userdetails")
+public class UserDetailsController {
+	
+	@Autowired
+    public UserDao userdao;
+    
+    @Autowired
+    public userdetailsDao userdetailsdao;
+    
+    @Autowired
+    public EmailServiceImpl emailServiceImpl;
+
+    @Autowired
+    public com.example.demo.Service.UserService UserService;
+    
+    @Autowired
+    public JdbcUserDetailsManager detailsManager;
+    
+    @PostMapping("/Createartist")
+    public ResponseEntity<Response> CreateArtist(@RequestHeader(name = "Authentication") String token, @RequestBody Map<Integer, String> map) {
+    	Response response = new Response();
+    	HttpStatus status = HttpStatus.OK;
+    	Map.Entry<Integer, String> user = map.entrySet().iterator().next();
+
+//    	UserDetails userDetails = userdetailsdao.findByusers_Username(user.getValue());
+    	CompletableFuture<UserDetails> CF_userDetails = UserService.findUserdetailsbyusername(user.getValue());
+    	CompletableFuture<Users>  CF_user = UserService.findUserbyusername(user.getValue()); 
+    	UserDetails userDetails = null;
+    	Users users = null;
+		try {
+			userDetails = CF_userDetails.get();
+			users = CF_user.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+    	
+    	userDetails.setArtistId(user.getKey());
+    	userDetails.setArtist(true);
+    	userdetailsdao.saveAndFlush(userDetails);
+    	List<GrantedAuthority> updatedauthority = new ArrayList<>();
+    	updatedauthority.add(new SimpleGrantedAuthority("ROLE_ARTIST"));
+    	ExtendedUser detail = new ExtendedUser(users.getUsername(), users.getPassword(), true, true, true, true, updatedauthority);
+        detailsManager.createUser(detail);
+    	
+    	
+    	
+//    	send email
+		 String body = "you Artist account has been successfully, You can now upload your own songs ";
+				 	;			
+		 emailServiceImpl.sendmail(userDetails.getUsers().getUsername(), "Artist account created successfully", 0, body);
+    	return new ResponseEntity<>(response ,status);
+    }
+}
