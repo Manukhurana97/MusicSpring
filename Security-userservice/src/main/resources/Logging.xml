@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<configuration debug="true" scan="true" scanPeriod="20 seconds">
+	    <appender name="Controller" class="ch.qos.logback.core.FileAppender">
+	        <file>Controller.log</file>
+	        <append>true</append>
+	        
+	        <encoder>
+	            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+	        </encoder>
+	    </appender>
+	    <appender name="PasswordController" class="ch.qos.logback.core.FileAppender">
+	        <file>PasswordController.log</file>
+	        <append>true</append>
+	        
+	        <encoder>
+	            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+	        </encoder>
+	    </appender>
+	    <appender name="UserDetailsController" class="ch.qos.logback.core.FileAppender">
+	        <file>UserDetailsController.log</file>
+	        <append>true</append>
+	        
+	        <encoder>
+	            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+	        </encoder>
+	    </appender>
+	    
+	    <!-- additivity=false ensures analytics data only goes to the analytics log -->
+	    <logger name="user" level="DEBUG" additivity="false">
+	        <appender-ref ref="Controller"/>
+	    </logger>
+	    <logger name="password" level="DEBUG" additivity="false">
+	        <appender-ref ref="PasswordController"/>
+	    </logger>
+	    <logger name="details" level="DEBUG" additivity="false">
+	        <appender-ref ref="UserDetailsController"/>
+	    </logger>
+	    <root>
+	        <appender-ref ref="Controller"/>
+	    </root>
+	</configuration>

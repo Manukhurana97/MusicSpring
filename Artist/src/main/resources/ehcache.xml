@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--https://dimitr.im/spring-boot-cache-ehcache-->
+<config xmlns='http://www.ehcache.org/v3'>
+    <cache alias="tasks">
+        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+        <value-type>java.util.List</value-type>
+        <expiry>
+            <ttl unit="seconds">20</ttl>
+        </expiry>
+        <resources>
+            <heap unit="MB">10</heap>
+        </resources>
+        <heap-store-settings>
+            <max-object-graph-size>5000</max-object-graph-size>
+            <max-object-size unit="MB">4</max-object-size>
+        </heap-store-settings>
+    </cache>
+</config>

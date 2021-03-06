@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<configuration debug="true" scan="true" scanPeriod="20 seconds">
+	    <appender name="Controller" class="ch.qos.logback.core.FileAppender">
+	        <file>ArtistController.log</file>
+	        <append>true</append>
+	        
+	        <encoder>
+	            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+	        </encoder>
+	    </appender>
+	    <appender name="ArtistRequest" class="ch.qos.logback.core.FileAppender">
+	        <file>ArtistRequestController.log</file>
+	        <append>true</append>
+	       
+	        <encoder>
+	            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+	        </encoder>
+	    </appender>
+	    <appender name="FollowerController" class="ch.qos.logback.core.FileAppender">
+	        <file>FollowerController.log</file>
+	        <append>true</append>
+	        
+	        <encoder>
+	            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+	        </encoder>
+	    </appender>
+	    
+	    <!-- additivity=false ensures analytics data only goes to the analytics log -->
+	    <logger name="artist" level="DEBUG" additivity="false">
+	        <appender-ref ref="Controller"/>
+	    </logger>
+	    <logger name="artist-request" level="DEBUG" additivity="false">
+	        <appender-ref ref="ArtistRequest"/>
+	    </logger>
+	    <logger name="follower" level="DEBUG" additivity="false">
+	        <appender-ref ref="FollowerController"/>
+	    </logger>
+	    <root>
+	        <appender-ref ref="Controller"/>
+	    </root>
+	</configuration>
