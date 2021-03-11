@@ -30,6 +30,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,7 +52,7 @@ import io.jsonwebtoken.Claims;
 public class Controller {
 	
 //	logging
-	Logger loging  = LoggerFactory.getLogger("user");
+//	Logger loging  = LoggerFactory.getLogger("user");
 
     @Autowired
     public BCryptPasswordEncoder passwordEncoder;
@@ -91,8 +92,9 @@ public class Controller {
 
                 if (PasswordValidator.isValid(form.getPassword())) {
                     String encodedPassword = passwordEncoder.encode(form.getPassword());
-                    //User detail = new User(form.getUsername(), encodedPassword, true,true, true, true, authority);
+//                    User detail = new User(form.getUsername(), encodedPassword, true,true, true, true, authority);
                     ExtendedUser detail = new ExtendedUser(form.getUsername(), encodedPassword, true, true, true, true, authority);
+                    System.out.println(detail);
                     detailsManager.createUser(detail);
                     
 //                    user details
@@ -115,6 +117,7 @@ public class Controller {
     	}
     	catch(Exception e) {
             status = HttpStatus.CONFLICT;
+            System.out.print(e.getMessage());
     		response.setMessage("email associated with different account");
     	}
 

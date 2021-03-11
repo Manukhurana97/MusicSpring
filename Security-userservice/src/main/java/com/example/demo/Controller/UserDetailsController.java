@@ -31,7 +31,7 @@ import com.example.demo.model.Users;
 public class UserDetailsController {
 	
 //	logging
-	Logger loging  = LoggerFactory.getLogger("details");
+//	Logger loging  = LoggerFactory.getLogger("details");
 	
 	@Autowired
     public UserDao userdao;

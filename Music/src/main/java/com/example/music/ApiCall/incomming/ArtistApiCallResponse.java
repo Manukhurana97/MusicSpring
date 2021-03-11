@@ -1,8 +1,8 @@
 package com.example.music.ApiCall.incomming;
 
-import java.util.List;
-
 import com.example.music.Model.Artists;
+
+import java.util.List;
 
 
 public class ArtistApiCallResponse {

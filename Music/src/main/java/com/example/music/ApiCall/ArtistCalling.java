@@ -1,7 +1,6 @@
 package com.example.music.ApiCall;
 
-import java.util.List;
-
+import com.example.music.Model.Artists;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.example.music.Model.Artists;
+import java.util.List;
 
 
 @FeignClient("Artist")

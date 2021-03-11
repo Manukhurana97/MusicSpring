@@ -26,7 +26,7 @@
 	
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-web</artifactId> 
+		    <artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -55,10 +55,10 @@
 		<dependency>
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-config-client</artifactId>
-		
+
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -68,7 +68,7 @@
 		    <artifactId>jjwt</artifactId>
 		    <version>0.9.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -105,7 +105,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-openfeign-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 		    <groupId>javax.cache</groupId>
 		    <artifactId>cache-api</artifactId>
@@ -113,7 +113,7 @@
 		<dependency>
 		    <groupId>org.ehcache</groupId>
 		    <artifactId>ehcache</artifactId>
-		</dependency>       
+		</dependency>
 	</dependencies>
 	
 

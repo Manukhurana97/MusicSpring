@@ -44,7 +44,7 @@ import io.jsonwebtoken.Claims;
 public class PasswordController {
 	
 //	logging
-	Logger loging  = LoggerFactory.getLogger("password");
+//	Logger loging  = LoggerFactory.getLogger("password");
 	
 	 @Autowired
 	 public BCryptPasswordEncoder passwordEncoder;
